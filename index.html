@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About</title>
+<title>Hello, World!</title>
 <style>
   * {
     margin: 0;
@@ -22,7 +22,6 @@
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     overflow: hidden;
     position: relative;
-    padding: 2rem;
   }
 
   @keyframes gradientShift {
@@ -31,6 +30,7 @@
     100% { background-position: 0% 50%; }
   }
 
+  /* Floating particles */
   .particles {
     position: absolute;
     inset: 0;
@@ -59,6 +59,69 @@
       transform: translateY(-110vh) translateX(var(--drift, 0px));
       opacity: 0;
     }
+  }
+
+  .card {
+    position: relative;
+    text-align: center;
+    padding: 4rem 5rem;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    z-index: 1;
+    animation: floatCard 6s ease-in-out infinite;
+  }
+
+  @keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #ff6ec4, #7873f5, #4adede, #ff6ec4);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 4s linear infinite;
+    text-shadow: 0 0 60px rgba(120, 115, 245, 0.3);
+  }
+
+  @keyframes shine {
+    to { background-position: 300% center; }
+  }
+
+  .subtitle {
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .glow-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 8px;
+    border-radius: 50%;
+    background: #4adede;
+    box-shadow: 0 0 12px 4px rgba(74, 222, 222, 0.7);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.6); opacity: 0.5; }
   }
 
   nav {
@@ -98,91 +161,6 @@
     background: linear-gradient(90deg, #ff6ec4, #7873f5, #4adede);
     box-shadow: 0 0 20px rgba(120, 115, 245, 0.5);
   }
-
-  .card {
-    position: relative;
-    text-align: center;
-    max-width: 640px;
-    padding: 4rem 3.5rem;
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    z-index: 1;
-    animation: floatCard 6s ease-in-out infinite;
-  }
-
-  @keyframes floatCard {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-  }
-
-  h1 {
-    font-size: clamp(2rem, 6vw, 3.2rem);
-    font-weight: 800;
-    letter-spacing: 2px;
-    background: linear-gradient(90deg, #ff6ec4, #7873f5, #4adede, #ff6ec4);
-    background-size: 300% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: shine 4s linear infinite;
-  }
-
-  @keyframes shine {
-    to { background-position: 300% center; }
-  }
-
-  p.lead {
-    margin-top: 1.5rem;
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 1.1rem;
-    line-height: 1.7;
-    font-weight: 300;
-  }
-
-  .stats {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-    margin-top: 2.5rem;
-    flex-wrap: wrap;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .stat .num {
-    font-size: 1.8rem;
-    font-weight: 800;
-    background: linear-gradient(90deg, #4adede, #7873f5);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .stat .label {
-    margin-top: 0.4rem;
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.5);
-  }
-
-  .divider {
-    width: 60px;
-    height: 3px;
-    margin: 2rem auto 0;
-    border-radius: 2px;
-    background: linear-gradient(90deg, #ff6ec4, #4adede);
-  }
 </style>
 </head>
 <body>
@@ -190,32 +168,17 @@
   <div class="particles" id="particles"></div>
 
   <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html" class="active">About</a>
+    <a href="index.html" class="active">Home</a>
+    <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
   </nav>
 
   <div class="card">
-    <h1>About This Page</h1>
-    <p class="lead">
-      This little corner of the web was built to prove a point: even a
-      "Hello, World!" can shine. Glassy cards, drifting particles, and
-      gradients that never sit still &mdash; all wrapped around three simple pages.
-    </p>
-    <div class="divider"></div>
-    <div class="stats">
-      <div class="stat">
-        <span class="num">3</span>
-        <span class="label">Pages</span>
-      </div>
-      <div class="stat">
-        <span class="num">100%</span>
-        <span class="label">Vanilla CSS</span>
-      </div>
-      <div class="stat">
-        <span class="num">&infin;</span>
-        <span class="label">Style</span>
-      </div>
+    <h1>Hello, World!</h1>
+    <div class="subtitle">
+      <span class="glow-dot"></span>
+      Welcome to the Web
+      <span class="glow-dot"></span>
     </div>
   </div>
 
