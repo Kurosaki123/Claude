@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    position: relative;
+    padding: 8rem 2rem 4rem;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .particles {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .particle {
+    position: absolute;
+    bottom: -50px;
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: rise linear infinite;
+  }
+
+  @keyframes rise {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-110vh) translateX(var(--drift, 0px)); opacity: 0; }
+  }
+
+  nav {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 10;
+  }
+
+  nav a {
+    padding: 0.55rem 1.4rem;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  nav a:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  nav a.active {
+    color: #0f0c29;
+    background: linear-gradient(90deg, #ff6ec4, #7873f5, #4adede);
+    box-shadow: 0 0 20px rgba(120, 115, 245, 0.5);
+  }
+
+  .header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  h1 {
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #ff6ec4, #7873f5, #4adede, #ff6ec4);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 4s linear infinite;
+  }
+
+  @keyframes shine {
+    to { background-position: 300% center; }
+  }
+
+  .header p {
+    margin-top: 0.8rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 1rem;
+    letter-spacing: 1px;
+    font-weight: 300;
+  }
+
+  .grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.8rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .tile {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .tile:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .tile .art {
+    position: absolute;
+    inset: 0;
+    background: var(--grad);
+    background-size: 200% 200%;
+    transition: background-position 0.6s ease, transform 0.6s ease;
+  }
+
+  .tile:hover .art {
+    background-position: 100% 100%;
+    transform: scale(1.1);
+  }
+
+  .tile .glyph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    opacity: 0.85;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  }
+
+  .tile .caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1rem 1.2rem;
+    background: linear-gradient(to top, rgba(15, 12, 41, 0.9), transparent);
+    transform: translateY(100%);
+    transition: transform 0.35s ease;
+  }
+
+  .tile:hover .caption {
+    transform: translateY(0);
+  }
+
+  .caption .title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+  }
+
+  .caption .tag {
+    margin-top: 0.2rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 8, 25, 0.88);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+  }
+
+  .lightbox.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lightbox-inner {
+    width: min(90vw, 520px);
+    aspect-ratio: 4 / 3;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .lightbox.open .lightbox-inner {
+    transform: scale(1);
+  }
+
+  .lightbox-inner .art {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lightbox-inner .glyph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+  }
+
+  .lightbox-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.4rem;
+    background: linear-gradient(to top, rgba(15, 12, 41, 0.9), transparent);
+    color: #fff;
+  }
+
+  .lightbox-caption .title {
+    font-size: 1.2rem;
+    font-weight: 800;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+  }
+</style>
+</head>
+<body>
+
+  <div class="particles" id="particles"></div>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html" class="active">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="header">
+    <h1>Gallery</h1>
+    <p>A small collection of colors and shapes &mdash; click any tile to expand</p>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+      <div class="art" id="lightboxArt"></div>
+      <div class="glyph" id="lightboxGlyph"></div>
+      <div class="lightbox-caption">
+        <div class="title" id="lightboxTitle"></div>
+      </div>
+      <div class="lightbox-close" id="lightboxClose">&times;</div>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      { title: 'Aurora', tag: 'Gradient', glyph: '&#10022;', grad: 'linear-gradient(135deg, #ff6ec4, #7873f5)' },
+      { title: 'Nebula', tag: 'Gradient', glyph: '&#9737;', grad: 'linear-gradient(135deg, #4adede, #7873f5)' },
+      { title: 'Solstice', tag: 'Gradient', glyph: '&#9728;', grad: 'linear-gradient(135deg, #ffb86c, #ff6ec4)' },
+      { title: 'Tidal', tag: 'Gradient', glyph: '&#9973;', grad: 'linear-gradient(135deg, #24243e, #4adede)' },
+      { title: 'Ember', tag: 'Gradient', glyph: '&#128293;', grad: 'linear-gradient(135deg, #ff5e62, #ff9966)' },
+      { title: 'Glacier', tag: 'Gradient', glyph: '&#10052;', grad: 'linear-gradient(135deg, #83a4d4, #b6fbff)' },
+      { title: 'Orchid', tag: 'Gradient', glyph: '&#127802;', grad: 'linear-gradient(135deg, #a18cd1, #fbc2eb)' },
+      { title: 'Eclipse', tag: 'Gradient', glyph: '&#127761;', grad: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)' },
+      { title: 'Verdant', tag: 'Gradient', glyph: '&#127807;', grad: 'linear-gradient(135deg, #56ab2f, #a8e063)' }
+    ];
+
+    const grid = document.getElementById('grid');
+    items.forEach((item, i) => {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.style.setProperty('--grad', item.grad);
+      tile.innerHTML = `
+        <div class="art"></div>
+        <div class="glyph">${item.glyph}</div>
+        <div class="caption">
+          <div class="title">${item.title}</div>
+          <div class="tag">${item.tag}</div>
+        </div>
+      `;
+      tile.addEventListener('click', () => openLightbox(item));
+      grid.appendChild(tile);
+    });
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxArt = document.getElementById('lightboxArt');
+    const lightboxGlyph = document.getElementById('lightboxGlyph');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+
+    function openLightbox(item) {
+      lightboxArt.style.background = item.grad;
+      lightboxGlyph.innerHTML = item.glyph;
+      lightboxTitle.textContent = item.title;
+      lightbox.classList.add('open');
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+    }
+
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    const container = document.getElementById('particles');
+    const count = 30;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 4 + 3;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
+      p.style.animationDuration = (Math.random() * 10 + 8) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      container.appendChild(p);
+    }
+  </script>
+
+</body>
+</html>
